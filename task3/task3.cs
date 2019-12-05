@@ -3,14 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 using System.IO;
 
-namespace task_3
+namespace task3reformed
 {
     class Program
     {
-        [STAThread]
         static void Main(string[] args)
         {
             string[] lines0 = new string[16];
@@ -21,40 +19,35 @@ namespace task_3
             double max = 0;
             int maxim = 0;
 
-            double[] result = new double[16];
-            for (int i = 0; i < 5; i++)
-            {
-                using (OpenFileDialog openFileDialog = new OpenFileDialog())
-                {
-                    MessageBox.Show("Выберите файл номер " + (i + 1));
-                    openFileDialog.InitialDirectory = "c:\\";
-                    openFileDialog.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
-                    openFileDialog.FilterIndex = 2;
-                    openFileDialog.RestoreDirectory = true;
+            string g;
+            g = Console.ReadLine();
+            int d = 0;
 
-                    if (openFileDialog.ShowDialog() == DialogResult.OK)
-                    {
-                        switch (i)
-                        {
-                            case 0:
-                                lines0 = File.ReadAllLines(openFileDialog.FileName);
-                                break;
-                            case 1:
-                                lines1 = File.ReadAllLines(openFileDialog.FileName);
-                                break;
-                            case 2:
-                                lines2 = File.ReadAllLines(openFileDialog.FileName);
-                                break;
-                            case 3:
-                                lines3 = File.ReadAllLines(openFileDialog.FileName);
-                                break;
-                            case 4:
-                                lines4 = File.ReadAllLines(openFileDialog.FileName);
-                                break;
-                        }
-                    }
+            foreach (string file in Directory.EnumerateFiles(g, "*.txt"))
+            {
+                switch (d)
+                {
+                    case 0:
+                        lines0 = File.ReadAllLines(file);
+                        break;
+                    case 1:
+                        lines1 = File.ReadAllLines(file);
+                        break;
+                    case 2:
+                        lines2 = File.ReadAllLines(file);
+                        break;
+                    case 3:
+                        lines3 = File.ReadAllLines(file);
+                        break;
+                    case 4:
+                        lines4 = File.ReadAllLines(file);
+                        break;
                 }
+                d++;
             }
+
+            double[] result = new double[16];
+
             for (int i = 0; i < 16; i++)
             {
                 double a0 = double.Parse(lines0[i].Replace('.', ','));
@@ -68,10 +61,10 @@ namespace task_3
                     max = result[i];
                     maxim = i;
                 }
-
             }
             maxim = maxim + 1;
-            MessageBox.Show(maxim.ToString());
+            Console.WriteLine(maxim.ToString());
+            Console.ReadKey();
         }
     }
 }

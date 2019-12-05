@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace task1
 {
@@ -19,15 +20,14 @@ namespace task1
             double perc = 0;
             float med = 0;
 
-            Int16 n = 0;
-            Console.WriteLine("Введите количество значений");
-            n = Int16.Parse(Console.ReadLine());
-            Console.WriteLine("Введите значения");
+            string n;
+            n = Console.ReadLine();
+            string [] lines = File.ReadAllLines(@n);
             float[] result = new float[5];
-            Int16[] x = new Int16 [n];
-            for (int i = 0; i < n; i++)
+            Int16[] x = new Int16 [lines.Length];
+            for (int i = 0; i < lines.Length; i++)
             {
-                x[i] = Int16.Parse(Console.ReadLine());
+                x[i] = Int16.Parse(lines[i]);
             }
             Array.Sort(x);
             foreach(int a in x)
@@ -35,24 +35,24 @@ namespace task1
                 sum += a;         
             }
 
-            if (n % 2 == 0)
+            if (lines.Length % 2 == 0)
             {
-                med = x[n / 2] + x[n / 2 - 1];
+                med = x[lines.Length / 2] + x[lines.Length / 2 - 1];
                 med = med / 2;
             }
-            else if (n == 1)
+            else if (lines.Length == 1)
                 med = x[0];
             else
-                med = x[n / 2];
-            max = x[n-1];
+                med = x[lines.Length / 2];
+            max = x[lines.Length - 1];
             min = x[0];
-            rank = 0.9 * (n - 1) + 1;
+            rank = 0.9 * (lines.Length - 1) + 1;
             rank1 = (Int16)rank;           
-            if (n == 1)
+            if (lines.Length == 1)
                 perc = x[0];
             else
                 perc = x[rank1 - 1] + (rank - rank1) * (x[rank1] - x[rank1 - 1]);
-            avg = sum / n;
+            avg = sum / lines.Length;
             Console.WriteLine();
             result[0] = (float)perc;
             result[1] = med;

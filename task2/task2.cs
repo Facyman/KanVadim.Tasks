@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace task2
 {
@@ -11,13 +12,14 @@ namespace task2
         static void Main(string[] args)
         {
 
-            int n = 0;
+            string n;
+            n = Console.ReadLine();
+            string[] lines = File.ReadAllLines(@n);
 
             float[,] x = new float[4,2];
-            Console.WriteLine("Введите координаты четырехугольника");
             for (int i = 0; i < 4; i++)
             {
-                var input = Console.ReadLine();
+                var input = lines[i];
                 string[] splitted = input.Split(' ');
                 for (int column = 0; column < splitted.Length; column++)
                 {
@@ -25,13 +27,14 @@ namespace task2
                     x[i, column] = a;
                 }
             }
-            Console.WriteLine("Введите количество точек");
-            n = Int32.Parse(Console.ReadLine());
-            Console.WriteLine("Введите координаты точек");
-            float[,] b = new float[n,2];
-            for (int i = 0; i < n && i < 100; i++)
+            string g;
+            g = Console.ReadLine();
+            string[] lines1 = File.ReadAllLines(@g);
+
+            float[,] b = new float[lines1.Length,2];
+            for (int i = 0; i < lines1.Length && i < 100; i++)
             {
-                string input = Console.ReadLine();
+                string input = lines1[i];
                 string[] splitted = input.Split(' ');
                 for (int column = 0; column < splitted.Length; column++)
                 {
@@ -40,7 +43,7 @@ namespace task2
                 }
             }
             Console.WriteLine();
-            for (int i = 0; i < n; i++)
+            for (int i = 0; i < lines1.Length; i++)
             {
                 float x1 = x[0, 0];
                 float y1 = x[0, 1];

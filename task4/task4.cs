@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace task4
 {
@@ -10,15 +11,15 @@ namespace task4
     {     
         static void Main(string[] args)
         {
-            Console.WriteLine("Введите количество посетителей");
-            int num = Int32.Parse(Console.ReadLine());
-            Console.WriteLine("Введите время");
-            DateTime[,] x = new DateTime[num, 2];
-            int[] timespan = new int[num];
-            DateTime[,] timespan1 = new DateTime[num, 2];
-            for (int i = 0; i < num; i++)
+            string n;
+            n = Console.ReadLine();
+            string[] lines = File.ReadAllLines(@n);
+            DateTime[,] x = new DateTime[lines.Length, 2];
+            int[] timespan = new int[lines.Length];
+            DateTime[,] timespan1 = new DateTime[lines.Length, 2];
+            for (int i = 0; i < lines.Length; i++)
             {
-                string input = Console.ReadLine();
+                string input = lines[i];
                 string[]  splitted = input.Split(' ');
                 for (int date = 0; date< 2; date++)
                 {
@@ -27,9 +28,9 @@ namespace task4
                 }              
             }
             int z = 0;
-            for (int i = 0; i < num; i++)
+            for (int i = 0; i < lines.Length; i++)
             {              
-                for (int j = i; j < num; j++)
+                for (int j = i; j < lines.Length; j++)
                 {
 
                     if (i != j)
@@ -46,7 +47,7 @@ namespace task4
                                 timespan1[z, 1] = x[i, 1];
                             else
                                 timespan1[z, 1] = x[j, 1];
-                            for (int g = j+1; g < num; g++)
+                            for (int g = j+1; g < lines.Length; g++)
                             {                              
                                     if (DateTime.Compare(timespan1[z, 1], x[g, 0]) > 0 && DateTime.Compare(timespan1[z, 0], x[g, 1]) < 0)
                                     {
@@ -68,9 +69,9 @@ namespace task4
                 }
                 
             }
-            for (int i = 0; i < num; i++)
+            for (int i = 0; i < lines.Length; i++)
             {
-                for (int j = 0; j < num; j++)
+                for (int j = 0; j < lines.Length; j++)
                 {
                     if (timespan1[i, 0].ToString("HH:mm") != "00:00" && timespan1[i, 1].ToString("HH:mm") != "00:00" && timespan1[i, 1] == timespan1[j, 0] && timespan[i] == timespan[j])
                     {
@@ -90,7 +91,7 @@ namespace task4
             }
             int max = timespan.Max();
             
-            for (int i = 0; i < num; i++)
+            for (int i = 0; i < lines.Length; i++)
                     if (timespan[i]==max && max!=0)
                 Console.WriteLine(timespan1[i, 0].ToString("HH:mm") + " " + timespan1[i, 1].ToString("HH:mm"));
             Console.ReadKey();
