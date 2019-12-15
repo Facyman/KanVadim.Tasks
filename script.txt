@@ -1,0 +1,32 @@
+DECLARE @MAX INT;
+SELECT        null as parent_id, dbo.catalog.name into temp
+FROM            dbo.aggregate INNER JOIN
+                         dbo.catalog ON dbo.aggregate.catalog_id = dbo.catalog.id INNER JOIN
+                         dbo.model ON dbo.aggregate.id = dbo.model.catalog_aggregate_id
+						 UNION all
+SELECT				 dbo.aggregate.catalog_id,	 dbo.aggregate.name
+FROM            dbo.aggregate INNER JOIN
+                         dbo.catalog ON dbo.aggregate.catalog_id = dbo.catalog.id INNER JOIN
+                         dbo.model ON dbo.aggregate.id = dbo.model.catalog_aggregate_id
+						 UNION all
+SELECT			dbo.model.catalog_aggregate_id + (SELECT COUNT (DISTINCT dbo.aggregate.name)FROM dbo.aggregate),dbo.model.name
+FROM            dbo.aggregate INNER JOIN
+                         dbo.catalog ON dbo.aggregate.catalog_id = dbo.catalog.id INNER JOIN
+                         dbo.model ON dbo.aggregate.id = dbo.model.catalog_aggregate_id
+SELECT @MAX = MAX(dbo.catalog_level.id) from dbo.catalog_level
+SELECT    ROW_NUMBER() OVER(ORDER BY parent_id) as id, dbo.temp.parent_id +@MAX-1 as parent_id , dbo.temp.name into temp2
+FROM            dbo.temp;
+WITH tempo AS 
+(
+SELECT id, parent_id, name, ROW_NUMBER() OVER (PARTITION BY parent_id, name ORDER BY parent_id,name)  row_num
+FROM dbo.temp2
+)
+DELETE FROM tempo
+WHERE row_num > 1;
+ALTER TABLE dbo.temp2
+DROP COLUMN id;
+INSERT INTO dbo.catalog_level(id,parent_id,name)
+SELECT  ROW_NUMBER() OVER(ORDER BY parent_id)+@MAX, dbo.temp2.parent_id+1, dbo.temp2.name
+FROM            dbo.temp2
+DROP TABLE dbo.temp
+DROP TABLE dbo.temp2
